@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find camera_test_in_gazebo)/world/warehouse.world"/> 
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="recording" value="false"/>
+        <arg name="debug" value="false"/>
+    </include>
+    <node name="rviz" pkg="rviz" type="rviz" />
+    
+    <group ns="cam1">
+      <param name="robot_description"
+              command="$(find xacro)/xacro.py $(find camera_test_in_gazebo)/urdf/camera.xacro ns:=cam1" />
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+            args="-urdf -model cam1 -param robot_description -x 4.6 -y 4.8 -z 2.8  -Y -2.355 -P 0.785"/>
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    </group>
+
+    <group ns="cam2">
+      <param name="robot_description"
+              command="$(find xacro)/xacro.py $(find camera_test_in_gazebo)/urdf/camera.xacro ns:=cam2" />
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+            args="-urdf -model cam2 -param robot_description -x 4.6 -y -4.8 -z 2.8  -Y 2.355 -P 0.785"/>
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    </group>
+
+    <group ns="cam_middle">
+      <param name="robot_description"
+              command="$(find xacro)/xacro.py $(find camera_test_in_gazebo)/urdf/camera.xacro ns:=cam2" />
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+            args="-urdf -model cam_middle -param robot_description -x 4.6 -z 2.8  -Y 3.14 -P 0.785"/>
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    </group>
+    
+</launch>
